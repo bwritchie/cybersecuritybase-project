@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Login</title>
+        <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    </head>
+    <body>
+
+        <h1>Employee Portal</h1>
+        <h2>Enter your username and password to login</h2>
+        
+        <form action="#" th:action="@{/login}" method="POST">
+            <p><label for="username">Username</label>: <input type="text" name="username" id="username"/></p>
+            <p><label for="password">Password</label>: <input type="text" name="password" id="password"/></p>
+            <p><input type="submit" value="Submit" /></p>
+        </form>
+
+        <h2>Vulnerabilities</h2>
+        <ul>
+            <li><b>A5-Security Misconfiguration</b>: No security applied to login page, CSRF is disabled</li>
+            <li><b>A6-Sensitive Data Exposure</b>: Password is displayed and sent in plaintext.</li>
+        </ul>
+        <p></p>
+    </body>
+</html>

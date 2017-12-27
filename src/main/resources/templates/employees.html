@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Manage Employees</title>
+        <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    </head>
+    <body>
+        <h2 th:inline="text">Hello [[${username}]], here are your details</h2>
+
+        <table>
+            <tr><td><b>Name</b></td><td><b>Address</b></td><td><b>NI Number</b></td><td><b>Salary</b></td></tr>  
+            <tr th:each="details : ${details}">
+                <td th:text="${details.name}">Name</td>
+                <td th:text="${details.address}">Address</td>
+                <td th:text="${details.ninumber}">NINumber</td>
+                <td th:text="${details.salary}">Salary</td>
+            </tr>
+        </table>
+
+        <h2>Employee Notes</h2>       
+        <ul>
+            <li th:each="item : ${list}">
+                <!-- utext makes this vulnerable to XSS attacks, replace with text -->
+                <span th:utext="${item.note}">Notes</span>
+            </li>
+        </ul>
+
+        <h3>Add a Note</h3>
+        <form th:action="@{/addnote}" method="POST">
+            <input type="hidden" th:value="${username}" name="username" />
+            <input type="text" name="note"/>
+            <input type="submit" value="Add Note"/>
+        </form>
+
+        <h2>Change Password</h2>
+
+        <form action="#" th:action="@{/employees}" method="POST">
+            <input type="hidden" th:value="${username}" name="username" />
+            <p><label for="submit">Old Password</label>: <input type="text" name="oldpassword" id="oldpassword"/></p>
+            <p><label for="submit">New Password</label>: <input type="text" name="newpassword" id="newpassword"/></p>
+            <p><input type="submit" value="Change Password" /></p>
+        </form>
+
+        <p th:each="update: ${update}">
+            <span th:text="${update}">update</span>
+        </p>
+
+        <h2>Vulnerabilities</h2>
+        <ul>
+            <li><b>A1-Injection</b>: Password change field can be used for SQL injection (e.g. enter <code>' OR TRUE;select * from Users;--'</code> in the Old Password field)</li>
+            <li><b>A2-Broken Authentication and Session Management</b>: Notes can be updated without authentication (e.g. type <code>curl -- data "username=dave&amp;note=Hacked!" localhost:8080/addnote</code> at the command line)</li>
+            <li><b>A3-Cross-Site Scripting (XSS)</b>: Add a Note field can be used for XSS (e.g.enter <code>alert("Hello, World!")</code> surrounded by <code>script</code> tags)</li>
+        </ul>
+        <p></p>
+    </body>
+</html>

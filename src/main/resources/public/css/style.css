@@ -1,0 +1,51 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 24-Dec-2017, 10:34:16
+    Author     : BenR
+*/
+
+html, body, h1, h2, h3, h4, ul, ol, li, p, a {
+    padding: 0;
+    border: 0;
+    margin: 0;
+}
+
+h1 {
+    color: #AA0000;
+    margin-bottom: 20px;
+    text-align: center;
+}
+h2 {
+    color: #000000;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    border-bottom: medium solid blue;
+}
+h3 {
+    color: #333333;
+    margin-top: 15px;
+    border-bottom: 1px solid #cccccc;
+}
+ul {
+    padding-left: 30px;
+}
+li {
+    margin-bottom: 5px;
+}
+body {
+    font-family: 'Oswald', cursive;
+    padding-left: 2em;
+    padding: 15px;
+}
+p {
+    color: #444444;
+    padding: 5px;
+    margin: 5px
+}
+a {
+    color: #440000;
+}
