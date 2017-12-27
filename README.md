@@ -1,23 +1,18 @@
 # cybersecuritybase-project
-Template for the first course project.
 
-This is a simple and intentionally broken Spring Boot application written for the CyberSecurity Base Course Project I (see https://cybersecuritybase.github.io/). It (intentionally) contains five of the OWASP Top-10 Web Security vulnerabilities:
+This is a simple and intentionally insecure Spring Boot application written for the CyberSecurity Base Course Project I (see https://cybersecuritybase.github.io/). It (intentionally) contains five of the OWASP Top-10 Web Security vulnerabilities, and (probably unintentionally) is likely to contain most of the others as well. Intentional vulnerabilities are:
 
 * **A1 - Injection**: it is possible to carry out a SQL injection attack using the change password form
-* **A2 - Broken Authentication and Session Management**: there isn't much in the way of meaningful session management, so this is broken
+* **A2 - Broken Authentication and Session Management**: session management is poorly-written and vulnerable to client-side attacks 
 * **A3 - Cross-Site Scripting**: you can carry out an XSS attack using the Add Note form
 * **A6 - Sensitive Data Exposure**: credentials are passed in plaintext and are not stored securely
-* **A7 - Missing Function Level Access Control**: no proper access control is carried out on management and note functionality
+* **A7 - Missing Function Level Access Control**: no proper access control is carried out on add note functionality
 
-There are also some more more (including **A5 - Security Misconfiguration** as much of the Spring Boot security defaults are disabled, and
-it is almost certainly possible to carry out **A8 - Cross-Site Request Forgery (CSRF)** as I configured CSRF protection off). In fact, this
-probably allows all of the top ten in one way or another...
+There are also other issues (including **A5 - Security Misconfiguration** as much of the Spring Boot security defaults are disabled, and it is almost certainly possible to carry out **A8 - Cross-Site Request Forgery (CSRF)** as I configured CSRF protection off). 
 
 ## Intended functionality
 
-This is a very simple employee management portal that shows some employee details
-and allows password resets and employee notes to be added. Functionality is very 
-incomplete. The supported use-cases are as follows:
+The application is a very simple employee management portal that shows some employee details and allows password resets and employee notes to be added. Functionality is very incomplete, as it only really implements a minimal set of functions to allow attacks to be carried out. The supported use-cases are as follows:
 
 * HTTP requests to unknown URLs are redirected to ***/login***
 * ***/login*** verifies username and password information against data stored in the Users table
@@ -27,12 +22,13 @@ incomplete. The supported use-cases are as follows:
   * list any Notes about the Employee from the Notes table
   * add new Notes and store them in the Notes table
   * allow the Employee to change their password, and store the changed password in the Notes table
+* ***/addnote*** should be private (called only from ***/employees*** when the **Add Note** button is clicked) and available only to logged-in and authenticated users. However, it isn't, and relies on 'security through obscurity'.  
   
 Due to the intentionally-broken nature of the application, none of these functions work quite as intended (there are probably also a number of bugs as well - I was learning Spring Boot, JPA, and Thymeleaf as I went along, and some of the coding is probably 'non-optimal' ;) ). 
 
 ## Getting Started
 
-You can use **dave** / **password** (non-manager) or **joe** / **letmein** (manager) usernames / passwords to get logged in
+You can use **dave** / **password** (non-manager) or **joe** / **letmein** (manager) usernames / passwords to get logged in. Alternatively you can trivially enumerate users and brute force via the top-100 passwords list 
 
 ## Intentional attacks
 
@@ -44,7 +40,7 @@ You can use **dave** / **password** (non-manager) or **joe** / **letmein** (mana
 
 ## Tests
 
-Automated tests are completely inadequate. 
+Automated tests are completely inadequate. In fact, there aren't really any. 
 
 ## Bugs and broken stuff
 
