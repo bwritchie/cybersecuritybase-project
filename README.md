@@ -3,12 +3,12 @@
 This is a simple and intentionally insecure Spring Boot application written for the CyberSecurity Base Course Project I (see https://cybersecuritybase.github.io/). It (intentionally) contains five of the OWASP Top-10 Web Security vulnerabilities, and (probably unintentionally) is likely to contain most of the others as well. Intentional vulnerabilities are:
 
 * **A1 - Injection**: it is possible to carry out a SQL injection attack using the change password form
-* **A2 - Broken Authentication and Session Management**: there isn't much in the way of meaningful session management, so this is broken
+* **A2 - Broken Authentication and Session Management**: session management is poorly-written and vulnerable to client-side attacks 
 * **A3 - Cross-Site Scripting**: you can carry out an XSS attack using the Add Note form
 * **A6 - Sensitive Data Exposure**: credentials are passed in plaintext and are not stored securely
-* **A7 - Missing Function Level Access Control**: no proper access control is carried out on management and note functionality
+* **A7 - Missing Function Level Access Control**: no proper access control is carried out on add note functionality
 
-There are also some more more (including **A5 - Security Misconfiguration** as much of the Spring Boot security defaults are disabled, and it is almost certainly possible to carry out **A8 - Cross-Site Request Forgery (CSRF)** as I configured CSRF protection off). 
+There are also other issues (including **A5 - Security Misconfiguration** as much of the Spring Boot security defaults are disabled, and it is almost certainly possible to carry out **A8 - Cross-Site Request Forgery (CSRF)** as I configured CSRF protection off). 
 
 ## Intended functionality
 
@@ -40,7 +40,7 @@ You can use **dave** / **password** (non-manager) or **joe** / **letmein** (mana
 
 ## Tests
 
-Automated tests are completely inadequate. In fact, there aren't any. 
+Automated tests are completely inadequate. In fact, there aren't really any. 
 
 ## Bugs and broken stuff
 
