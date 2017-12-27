@@ -15,7 +15,9 @@ probably allows all of the top ten in one way or another...
 
 ## Intended functionality
 
-The intended use-cases are as follows:
+This is a very simple employee management portal that shows some employee details
+and allows password resets and employee notes to be added. Functionality is very 
+incomplete. The supported use-cases are as follows:
 
 * HTTP requests to unknown URLs are redirected to ***/login***
 * ***/login*** verifies username and password information against data stored in the Users table
@@ -30,16 +32,21 @@ Due to the intentionally-broken nature of the application, none of these functio
 
 ## Getting Started
 
-You can use dave / password (non-manager) or joe / letmein (manager) usernames / passwords to get logged in
+You can use **dave** / **password** (non-manager) or **joe** / **letmein** (manager) usernames / passwords to get logged in
 
 ## Intentional attacks
 
 * The change password form permits a SQL injection attack (e.g. enter **' OR TRUE;select * from Users;--'** in the old password field ) 
-* The add note form permits a XSS attack (e.g. enter **<code>alert("Hello, World!")</code>** as a Note)
+* The add note form permits a XSS attack (e.g. enter **<script>alert("Hello, World!")</script>** as a Note)
 * There is no authentication on methods, so you can add notes without knowing the User's password (try **curl -- data "username=dave&amp;note=Hacked!" localhost:8080/addnote** from the command line, or combine with the XSS attack above) 
 * Credentials are not stored securely, and can be captured during the HTTP POST on login or by doing a SQL injection attack to list the Users table
-* Some of the HTTP post information may be trivially manipulated on the client side
+* Some of the HTTP post information may be trivially manipulated on the client side, e.g. the hidden username field
 
-## bugs and broken stuff
+## Tests
 
-Please let me know if you find anything broken and i'll fix it. 
+Automated tests are completely inadequate. 
+
+## Bugs and broken stuff
+
+Please let me know if you find anything broken and i'll fix it. It was also a bit of a learning exercise, so some things 
+could be done better - i'd appreciate thoughts on the 'right way'. 
