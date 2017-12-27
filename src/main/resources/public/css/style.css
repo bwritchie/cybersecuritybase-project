@@ -1,7 +1,5 @@
 /*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+Basic CSS style sheet for the application 
 */
 /* 
     Created on : 24-Dec-2017, 10:34:16
@@ -37,7 +35,7 @@ li {
     margin-bottom: 5px;
 }
 body {
-    font-family: 'Oswald', cursive;
+    font-family: 'Open Sans', cursive;
     padding-left: 2em;
     padding: 15px;
 }

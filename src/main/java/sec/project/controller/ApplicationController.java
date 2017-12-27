@@ -17,18 +17,18 @@ import sec.project.repository.NoteRepository;
 import sec.project.repository.UserRepository;
 
 /**
- * Deliberately insecure Spring Boot Application Controller class. This is a 
- * horrible implementation to permit various attacks on the system. Error 
+ * Deliberately insecure Spring Boot Application Controller class. This is a
+ * horrible implementation to permit various attacks on the system. Error
  * handling is minimal, and there is no attempt to block CSRF / XSS etc. There
  * is no method authentication, and the login prompt can be trivially bypassed
  *
- * The controller links to three JPA repositories, containing user account 
- * details, employee details, and employee notes. These are populated on 
+ * The controller links to three JPA repositories, containing user account
+ * details, employee details, and employee notes. These are populated on
  * application startup via an import.sql script, a real application would link
- * to a permanent database. 
+ * to a permanent database.
  *
  * Provides URL mapping for login, employee, and addNote endpoints
- * 
+ *
  * @author BenR
  */
 @Controller
@@ -40,7 +40,7 @@ public class ApplicationController {
     private UserRepository userRepository;
     @Autowired
     private NoteRepository noteRepository;
-    
+
     // this JDBC template is used to permit a SQL injection attack on 
     // the password change functionality
     @Autowired
@@ -48,7 +48,7 @@ public class ApplicationController {
 
     /**
      * Default request mapping gets sent to the login page
-     * 
+     *
      * @return a redirect to the login page
      */
     @RequestMapping("*")
@@ -58,8 +58,8 @@ public class ApplicationController {
 
     /**
      * Handle GET requests to the /login endpoint at the start of login
-     * 
-     * @return the login template 
+     *
+     * @return the login template
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getLoginPage() {
@@ -69,8 +69,8 @@ public class ApplicationController {
     /**
      * Handle POST requests to the /login endpoint to validate the supplied
      * credentials
-     * 
-     * @param model autowired Model 
+     *
+     * @param model autowired Model
      * @param username username supplied by the user
      * @param password password supplied the user
      * @return the employees page if login was successful
@@ -96,11 +96,11 @@ public class ApplicationController {
         }
     }
 
-     /**
+    /**
      * Handle GET requests to the /employees endpoint after login
-     * 
-     * @param model autowired Model 
-     * @return the employees template 
+     *
+     * @param model autowired Model
+     * @return the employees template
      */
     @RequestMapping(value = "/employees", method = RequestMethod.GET)
     public String getEmployeesPage(Model model) {
@@ -109,42 +109,58 @@ public class ApplicationController {
 
     /**
      * Intentionally horrible implementation of change password functionality.
-     * This does almost no validation, and uses an insecure SELECT via JDBC
-     * in order to permit SQL injection. Unnecessary data is then returned to 
-     * show the attacker the results of the injected query. 
-     * 
-     * Apart from that, it's great.      * 
-     * 
+     * This does almost no validation, and uses an insecure SELECT via JDBC in
+     * order to permit SQL injection. Unnecessary data is then returned to show
+     * the attacker the results of the injected query.
+     *
+     * Apart from that, it's great. *
+     *
      * @param model autowired Model
      * @param username username supplied by the user
-     * @param oldpassword the existing password 
+     * @param oldpassword the existing password
      * @param newpassword the new password
      * @return a confirmation message
      */
-    
     @RequestMapping(value = "/employees", method = RequestMethod.POST)
     public String changePassword(Model model, @RequestParam String username, @RequestParam String oldpassword, @RequestParam String newpassword) {
 
         // construct the query in an intentionally-bad way
         String query = "SELECT * FROM Users where username = '" + username + "' and password = '" + oldpassword + "'";
-        System.out.println("Executing: "+query);
-        // unnecessary return to a a List to allow the injection attack 
+        System.out.println("Executing: " + query);
+        // Query to a List; intent is that this would be empty if an incorrect
+        // password is specified, but this can be avoided by crafting the 
+        // password maliciously (e.g. ' OR TRUE;-- ) to list the whole Users table
         List l = jdbcTemplate.queryForList(query);
-        // add the results (should just be a confirmation message really)
+        // prepare the model for update
         populateModel(username, model);
-        model.addAttribute("update", l);
+        // intended to provide password update functionality: size greater than
+        // one should imply something is going wrong! 
+        if (l.size() > 0) {
+            // get the User from the repository
+            User u = userRepository.findByUsername(username);
+            // update the password
+            u.setPassword(newpassword);
+            // and store it again 
+            userRepository.save(u);
+            // return the results (this is a bit unnecessary, but makes for a 
+            // clear attack - should just be a confirmation message really)
+            model.addAttribute("update", l);
+        }
+        else {
+            model.addAttribute("update", "incorrect password supplied, not changed");
+        }
         // and direct back to the employees page
         return "employees";
     }
 
     /**
      * Method to add an employee note. This is again deliberately coded badly,
-     * to provide no authentication. Notes can therefore be added just by 
-     * asserting a username. 
-     * 
-     * The lack of error handling probably means that this can be used for 
-     * username enumeration too     * 
-     * 
+     * to provide no authentication. Notes can therefore be added just by
+     * asserting a username.
+     *
+     * The lack of error handling probably means that this can be used for
+     * username enumeration too *
+     *
      * @param model autowired Model
      * @param username username supplied by the user
      * @param note the note to add
@@ -165,7 +181,7 @@ public class ApplicationController {
      * returned
      *
      * TODO: this should have some error handling
-     * 
+     *
      * @param username
      * @param model
      */
