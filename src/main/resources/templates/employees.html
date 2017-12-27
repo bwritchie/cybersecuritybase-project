@@ -49,8 +49,8 @@
         <h2>Vulnerabilities</h2>
         <ul>
             <li><b>A1-Injection</b>: Password change field can be used for SQL injection (e.g. enter <code>' OR TRUE;--</code> in the Old Password field)</li>
-            <li><b>A2-Broken Authentication and Session Management</b>: Notes can be updated without authentication (e.g. type <code>curl -- data "username=dave&amp;note=Hacked!" localhost:8080/addnote</code> at the command line)</li>
             <li><b>A3-Cross-Site Scripting (XSS)</b>: Add a Note field can be used for XSS (e.g.enter <code>alert("Hello, World!")</code> surrounded by <code>script</code> tags)</li>
+            <li><b>A7-Missing Function Level Access Control</b>: Notes can be updated without authentication (e.g. type <code>curl -- data "username=dave&amp;note=Hacked!" localhost:8080/addnote</code> at the command line)</li>
         </ul>
         <p></p>
     </body>
