@@ -10,33 +10,42 @@ This is a simple and intentionally insecure Spring Boot application written for 
 
 There are also other issues (including **A5 - Security Misconfiguration** as much of the Spring Boot security defaults are disabled, and it is almost certainly possible to carry out **A8 - Cross-Site Request Forgery (CSRF)** as I configured CSRF protection off). 
 
+The POM specifies 
+`   <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.2.RELEASE</version>
+    </parent>`
+The current version (at the time of writing) is `1.5.9.RELEASE` so **A9 - Using Components with Known Vulnerabilities** also applies!  
+
+
 ## Intended functionality
 
 The application is a very simple employee management portal that shows some employee details and allows password resets and employee notes to be added. Functionality is very incomplete, as it only really implements a minimal set of functions to allow attacks to be carried out. The supported use-cases are as follows:
 
-* HTTP requests to unknown URLs are redirected to ***/login***
-* ***/login*** verifies username and password information against data stored in the Users table
-* ***/employees*** provides basic employee management functionality:
+* HTTP requests to unknown URLs are redirected to `/login`
+* `/login` verifies username and password information against data stored in the Users table
+* `/employees` provides basic employee management functionality:
   * if the Employee is not a manager, only list their details from the Employees table
   * otherwise, if they are a manager, list all Employees
   * list any Notes about the Employee from the Notes table
   * add new Notes and store them in the Notes table
   * allow the Employee to change their password, and store the changed password in the Notes table
-* ***/addnote*** should be private (called only from ***/employees*** when the **Add Note** button is clicked) and available only to logged-in and authenticated users. However, it isn't, and relies on 'security through obscurity'.  
+* `/addnote` should be private (called only from `/employees` when the **Add Note** button is clicked) and available only to logged-in and authenticated users. However, it isn't, and relies on 'security through obscurity'.  
   
 Due to the intentionally-broken nature of the application, none of these functions work quite as intended (there are probably also a number of bugs as well - I was learning Spring Boot, JPA, and Thymeleaf as I went along, and some of the coding is probably 'non-optimal' ;) ). 
 
 ## Getting Started
 
-You can use **dave** / **password** (non-manager) or **joe** / **letmein** (manager) usernames / passwords to get logged in. Alternatively you can trivially enumerate users and brute force via the top-100 passwords list 
+You can use `dave` / `password` (non-manager) or `joe` / `letmein` (manager) usernames / passwords to get logged in. Alternatively you can trivially enumerate users and brute force via the top-100 passwords list 
 
 ## Intentional attacks
 
-* The change password form permits a SQL injection attack (e.g. enter **' OR TRUE;select * from Users;--'** in the old password field ) 
-* The add note form permits a XSS attack (e.g. enter **<script>alert("Hello, World!")</script>** as a Note)
-* There is no authentication on methods, so you can add notes without knowing the User's password (try **curl -- data "username=dave&amp;note=Hacked!" localhost:8080/addnote** from the command line, or combine with the XSS attack above) 
+* The change password form permits a SQL injection attack (e.g. enter `' OR TRUE;select * from Users;--'` in the old password field ) 
+* The add note form permits a XSS attack (e.g. enter `<script>alert("Hello, World!")</script>` as a Note)
+* There is no authentication on methods, so you can add notes without knowing the User's password (try `curl -- data "username=dave&amp;note=Hacked!" localhost:8080/addnote` from the command line, or combine with the XSS attack above) 
 * Credentials are not stored securely, and can be captured during the HTTP POST on login or by doing a SQL injection attack to list the Users table
-* Some of the HTTP post information may be trivially manipulated on the client side, e.g. the hidden username field
+* Some of the HTTP post information may be trivially manipulated on the client side, e.g. the hidden `username` field
 
 ## Tests
 
