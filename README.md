@@ -10,13 +10,7 @@ This is a simple and intentionally insecure Spring Boot application written for 
 
 There are also other issues (including **A5 - Security Misconfiguration** as much of the Spring Boot security defaults are disabled, and it is almost certainly possible to carry out **A8 - Cross-Site Request Forgery (CSRF)** as I configured CSRF protection off). 
 
-The POM specifies 
-`   <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.2.RELEASE</version>
-    </parent>`
-The current version (at the time of writing) is `1.5.9.RELEASE` so **A9 - Using Components with Known Vulnerabilities** also applies!  
+The POM specifies `<artifactId>spring-boot-starter-parent</artifactId>` and `<version>1.4.2.RELEASE</version>`. The current version (at the time of writing) is `1.5.9.RELEASE` so **A9 - Using Components with Known Vulnerabilities** also applies!  
 
 
 ## Intended functionality
